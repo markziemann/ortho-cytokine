@@ -1,0 +1,123 @@
+---
+title: "Cytokine analysis of orthopedic patients"
+format:
+  html:
+    toc: true
+    self-contained: TRUE
+editor: visual
+theme: darkly
+fig-height: 7
+fig-width: 7 
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(tidyverse)
+```
+
+## Load data
+
+```{r}
+#| label: load data
+
+pg <- read.table("pg_ml.tsv",sep="\t",header=TRUE,row.names=1)
+pg[1:6,1:8]
+str(pg)
+
+pg <- t(pg)
+pg[1:6,1:8]
+
+```
+
+## My custom analysis
+
+Basic analysis.
+
+```{r}
+#| label: basics
+
+dim(pg)
+
+colcount <- apply(pg,2, function(x) {
+  length(which(!is.na(x)))
+})
+
+head(colcount)
+barplot(colcount,main="num cytokines detected per sample")
+
+rowcount <- apply(pg,1, function(x) {
+  length(which(!is.na(x)))
+})
+
+head(rowcount)
+barplot(rowcount,main="number of samples with a cytokine detected")
+
+rowcount <- rowcount[order(rowcount)]
+barplot(head(rowcount,20),horiz = TRUE, las=1,cex.names = 0.8,xlab="num samples",main="detection rate")
+
+```
+
+## MDS plot
+
+Running an MDS plot.
+
+It shows some variability, in particular 4015, 2007, 1007 and some others are not clustered with the bulk of samples.
+
+```{r}
+#| label: mds1
+
+mds <- cmdscale(dist(t(pg)))
+
+cols <- sapply(strsplit(colnames(pg),""),"[[",1)
+cols <- gsub("2","green",cols)
+cols <- gsub("1","lightblue",cols)
+cols <- gsub("3","pink",cols)
+cols <- gsub("4","darkgray",cols)
+
+
+plot(mds, xlab="Coordinate 1", ylab="Coordinate 2", 
+  col=cols, cex=4 , pch=19, main="MDS plot all samples (not transformed)",
+  bty="n")
+
+text(mds,labels = colnames(pg))
+
+```
+
+Now log transform the data and repeat.
+
+It certainly looks better, as there is distinct clustering of the blue samples which is distinct from the other samples.
+
+```{r}
+#| label: mds2
+
+lpg <- log(pg)
+mds <- cmdscale(dist(t(lpg)))
+
+cols <- sapply(strsplit(colnames(pg),""),"[[",1)
+cols <- gsub("2","green",cols)
+cols <- gsub("1","lightblue",cols)
+cols <- gsub("3","pink",cols)
+cols <- gsub("4","darkgray",cols)
+
+
+plot(mds, xlab="Coordinate 1", ylab="Coordinate 2", 
+  col=cols, cex=4 , pch=19, main="MDS plot all samples (not transformed)",
+  bty="n")
+
+text(mds,labels = colnames(pg))
+
+```
+
+## References
+
+## Session information
+
+It is always a good idea to record information about the environment, which will help reproducibility.
+
+```{r}
+#| label: sessioninfo
+#| warning: false
+sessionInfo()
+```
