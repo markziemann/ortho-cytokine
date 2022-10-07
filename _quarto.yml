@@ -1,0 +1,13 @@
+format:
+  html:
+    toc: true
+    self-contained: TRUE
+code-fold: true
+editor: visual
+theme: darkly
+fig-height: 7
+fig-width: 7
+
+theme:
+  light: cosmo
+  dark: cyborg

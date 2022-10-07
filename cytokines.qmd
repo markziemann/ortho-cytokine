@@ -1,44 +1,86 @@
 ---
 title: "Cytokine analysis of orthopedic patients"
-format:
-  html:
-    toc: true
-    self-contained: TRUE
-editor: visual
-theme: darkly
-fig-height: 7
-fig-width: 7 
+author: "Mark Ziemann"
+date: "`r Sys.Date()`"
 ---
 
 ```{r}
 #| label: load-packages
 #| include: false
 
-library(tidyverse)
+library("gplots")
+library("kableExtra")
+library("beeswarm")
+library("vioplot")
+
 ```
 
 ## Load data
 
+Also putting the columns in order.
 ```{r}
 #| label: load data
 
 pg <- read.table("pg_ml.tsv",sep="\t",header=TRUE,row.names=1)
 pg[1:6,1:8]
-str(pg)
 
 pg <- t(pg)
+pg <- pg[,order(colnames(pg))]
 pg[1:6,1:8]
 
 ```
+
+## Sample sheet
+
+Here are the groups:
+
+10**: Adhesive capsulitis (not for inclusion)
+
+20**: Control Instability
+
+30**: Rotator cuff (for inclusion)
+
+40**: Case Osteoarthritis
+
+Also I'm putting the rows in order.
+
+```{r}
+#| label: samplesheet
+
+ss <- read.table("samplesheet.tsv",header=TRUE,row.names=1,sep="\t")
+
+ss <- ss[order(rownames(ss)),]
+
+ss %>% kbl(caption = "Sample sheet") %>% kable_styling(full_width = FALSE)
+
+```
+
+To investigate if secreted proteins and biomarkers in plasma are associated with:
+
+* Differentially expressed cytokines in patients with rotator cuff tears who heal/don’t heal
+
+* Primary osteoarthritis versus control instability
+
+* Rotator cuff arthropathy versus control instability
 
 ## My custom analysis
 
 Basic analysis.
 
+Need to remove 10** samples from the analysis.
+
 ```{r}
-#| label: basics
+#| label: remove_adhesive_capsulitis
 
 dim(pg)
+pg <- pg[,grep("^10",colnames(pg),invert=TRUE)]
+dim(pg)
+
+```
+
+
+```{r}
+#| label: basic_analysis
 
 colcount <- apply(pg,2, function(x) {
   length(which(!is.na(x)))
@@ -55,7 +97,9 @@ head(rowcount)
 barplot(rowcount,main="number of samples with a cytokine detected")
 
 rowcount <- rowcount[order(rowcount)]
-barplot(head(rowcount,20),horiz = TRUE, las=1,cex.names = 0.8,xlab="num samples",main="detection rate")
+
+barplot(head(rowcount,20),horiz = TRUE, las=1,cex.names = 0.8,
+  xlab="num samples",main="detection rate")
 
 ```
 
@@ -63,7 +107,8 @@ barplot(head(rowcount,20),horiz = TRUE, las=1,cex.names = 0.8,xlab="num samples"
 
 Running an MDS plot.
 
-It shows some variability, in particular 4015, 2007, 1007 and some others are not clustered with the bulk of samples.
+It shows some variability, in particular 4015, 4012, 2007 and some others are not 
+clustered with the bulk of samples.
 
 ```{r}
 #| label: mds1
@@ -76,7 +121,6 @@ cols <- gsub("1","lightblue",cols)
 cols <- gsub("3","pink",cols)
 cols <- gsub("4","darkgray",cols)
 
-
 plot(mds, xlab="Coordinate 1", ylab="Coordinate 2", 
   col=cols, cex=4 , pch=19, main="MDS plot all samples (not transformed)",
   bty="n")
@@ -87,7 +131,10 @@ text(mds,labels = colnames(pg))
 
 Now log transform the data and repeat.
 
-It certainly looks better, as there is distinct clustering of the blue samples which is distinct from the other samples.
+It certainly looks better, as there is some clustering of the grops happening.
+toward the left are the control instability samples (20**),
+on the right are the pink rotator cuff samples (30**)
+and intermediate are the osteoarthritis samples (40**).
 
 ```{r}
 #| label: mds2
@@ -103,12 +150,287 @@ cols <- gsub("4","darkgray",cols)
 
 
 plot(mds, xlab="Coordinate 1", ylab="Coordinate 2", 
-  col=cols, cex=4 , pch=19, main="MDS plot all samples (not transformed)",
+  col=cols, cex=4 , pch=19, main="MDS plot all samples (log transformed)",
   bty="n")
 
 text(mds,labels = colnames(pg))
 
 ```
+
+Now make an MDS plot based on the analytes, rather than samples.
+
+```{r}
+#| label: mds3
+
+mds <- cmdscale(dist(lpg))
+
+cols <- sapply(strsplit(colnames(pg),""),"[[",1)
+cols <- gsub("2","green",cols)
+cols <- gsub("1","lightblue",cols)
+cols <- gsub("3","pink",cols)
+cols <- gsub("4","darkgray",cols)
+
+
+plot(mds, xlab="Coordinate 1", ylab="Coordinate 2", 
+  col="gray", cex=4 , pch=19, main="MDS plot all cytokines (log transformed)",
+  bty="n")
+
+text(mds,labels = rownames(pg))
+
+```
+
+## Correlation heatmap
+
+This can identify groups of samples with similar profiles, or groups of analytes that are co-regulated.
+
+```{r}
+#| label: corheatmap1
+
+colfunc <- colorRampPalette(c("white", "yellow", "red"))
+
+mc <- cor(lpg,method="pearson",use = "pairwise.complete")
+
+heatmap.2( mc, col=colfunc(25),scale="none",
+  trace="none",margins = c(5,5), cexRow=0.6, cexCol=0.6,  main="Pearson correlation of samples")
+
+mc <- cor(lpg,method="spearman",use = "pairwise.complete")
+
+heatmap.2( mc, col=colfunc(25),scale="none",
+  trace="none",margins = c(5,5), cexRow=0.6, cexCol=0.6,  main="Spearman correlation of samples")
+
+mc2 <- cor(t(lpg),method="pearson",use = "pairwise.complete")
+
+heatmap.2( mc2, col=colfunc(25),scale="none",
+  trace="none",margins = c(5,5), cexRow=0.6, cexCol=0.8,  main="Pearson correlation of cytokines")
+
+mc2 <- cor(t(lpg),method="spearman",use = "pairwise.complete")
+
+heatmap.2( mc2, col=colfunc(25),scale="none",
+  trace="none",margins = c(5,5), cexRow=0.6, cexCol=0.8,  main="Spearman correlation of cytokines")
+
+```
+
+## Heatmap of all measurements
+
+```{r}
+#| label: heatmap2
+
+colfunc <- colorRampPalette(c("yellow", "red"))
+
+heatmap.2( lpg, col=colfunc(25),scale="none",
+  trace="none",margins = c(5,5), cexRow=0.6, cexCol=0.6,
+  main="Heatmap of all measurements - no scaling")
+
+```
+
+## Signatures of healing in rotator cuff patients
+
+TODO: Differentially expressed cytokines in patients with rotator cuff tears who heal/don’t heal
+
+## Primary osteoarthritis versus control instability
+
+Using a t-test approach
+
+```{r}
+#| label: CvsOA_ttest
+
+# filter ss and lpg for only OA and ctrl samples
+ss1 <- subset(ss,Patient_Group=="Case_Osteoarthritis" | Patient_Group=="Control_Instability")
+lpg1 <- lpg[,colnames(lpg) %in% rownames(ss1)]
+ss1 <- ss1[rownames(ss1) %in% colnames(lpg1),]
+
+case <- factor(ss1$Patient_Group,levels=c("Control_Instability","Case_Osteoarthritis"))
+sex <- factor(ss1$Sex)
+age <- scale(ss1$Age)
+
+# ttest approach (control vs case)
+
+res <- lapply(1:nrow(lpg1), function(i) {
+  cy <- lpg1[i,]
+  NAME <- rownames(lpg1)[i]
+  ttest <- t.test(cy ~ case )
+  LFC <- log2(ttest$estimate[2]/ttest$estimate[1])
+  P <- signif(ttest$p.value,3)
+  BASEMEAN <- mean(ttest$estimate[2]/ttest$estimate[1])
+  res <- c(BASEMEAN,LFC,P)
+  names(res) <- c("basemean","log2fc","pvalue")
+  return(res)
+})
+names(res) <- rownames(lpg1)
+resdf <- as.data.frame(do.call(rbind,res))
+resdf$fdr <- p.adjust(resdf$pvalue)
+resdf <- resdf[order(resdf$pvalue),]
+head(resdf,15) %>% 
+  kbl(caption = "cytokine t-test results") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+Volcano plot.
+
+```{r}
+#| label: CvsOA_ttest_volcplot
+
+sig <- subset(resdf,fdr<0.05)
+plot(resdf$log2fc,-log(resdf$pvalue),pch=19,
+  xlab="log2 fold change",ylab="-log10(pvalue)",
+  main="volcano plot (ctrl vs OA)")
+points(sig$log2fc,-log(sig$pvalue),col="red",pch=19)
+
+text(sig$log2fc,-log(sig$pvalue)+0.25,
+  labels=rownames(sig))
+
+```
+
+Boxplot of top results.
+
+```{r}
+#| label: CvsOA_ttest_boxplot
+#| fig-height: 5
+#| fig-width: 5
+
+cys <- rownames(head(resdf,10))
+
+null <- lapply(cys,function(cyname) {
+  cy <- lpg1[rownames(lpg1) == cyname,]
+  cydat <- unlist(as.vector(resdf[rownames(resdf) == cyname,]))
+  BASEMEAN <- signif(cydat[1],3)
+  LFC <- signif(cydat[2],3)
+  P <- signif(cydat[3],3)
+  FDR <- signif(cydat[4],3)
+  boxplot(cy ~ case ,col="white",main=cyname)
+  beeswarm(cy ~ case,add=TRUE,pch=19,cex=1.2)
+  mtext(paste("p =",P,"FDR =",FDR,"log2FC =",LFC,"basemean =",BASEMEAN))
+})
+
+```
+
+Next I will use a GLM approach.
+First I will look at the sex and age in the different groups.
+
+```{r}
+#| label: age1
+#| fig-height: 5
+#| fig-width: 5
+
+case <- factor(ss1$Patient_Group,levels=c("Control_Instability","Case_Osteoarthritis"))
+sex <- factor(ss1$Sex)
+
+age <- as.vector(scale(ss1$Age))
+
+ctrl_age <- age[case=="Control_Instability"]
+case_age <- age[case=="Case_Osteoarthritis"]
+
+boxplot(list("ctrl"=ctrl_age,"case"=case_age),ylab="age(scaled)")
+
+age <- ss1$Age
+
+ctrl_age <- age[case=="Control_Instability"]
+case_age <- age[case=="Case_Osteoarthritis"]
+
+boxplot(list("ctrl"=ctrl_age,"case"=case_age),ylab="age(unscaled)")
+
+age <- as.vector(scale(ss1$Age))
+
+```
+
+Now look at the balance of sexes in the control and case groups.
+
+```{r}
+#| label: sex1
+#| fig-height: 5
+#| fig-width: 5
+
+ctrl <- table(sex[case=="Control_Instability"])
+case <- table(sex[case=="Case_Osteoarthritis"])
+
+sexes <- cbind(ctrl,case)
+
+barplot(sexes,col=c("pink","lightblue"),
+  main="sex balance between groups",
+  ylab="n participants")
+
+legend("topright", legend=c("male", "female"),
+       fill=c("lightblue", "pink"), cex=1.2)
+
+```
+
+Now run the GLMs.
+
+```{r}
+#| label: CvsOA_glm
+
+# glm approach
+
+case <- factor(ss1$Patient_Group,levels=c("Control_Instability","Case_Osteoarthritis"))
+sex <- factor(ss1$Sex)
+age <- scale(ss1$Age)
+
+i=2
+cy <- lpg1[i,]
+NAME <- rownames(lpg)[i]
+myglm <- glm(cy ~ case + sex + age )
+summary(myglm)
+P <- summary(aov(myglm))[[1]][["Pr(>F)"]][1]
+
+glmres <- lapply(rownames(resdf), function(cyname) {
+  cy <- lpg1[rownames(lpg1) == cyname,]
+  fit <- glm(cy ~ sex + age + case)
+  summary(fit)
+  P <- summary(aov(fit))[[1]][["Pr(>F)"]][1]
+})
+glmres <- abs(unname(unlist(glmres)))
+
+resdf$pglm <- unname(unlist(glmres))
+resdf$fdrglm <- p.adjust(resdf$pglm)
+
+head(resdf,15) %>%
+  kbl(caption = "cytokine t-test and GLM results") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+Look at the effect of the other covariates on the data.
+
+```{r}
+#| label: covars
+
+res_sex <- lapply(rownames(resdf), function(cyname) {
+  cy <- lpg1[rownames(lpg1) == cyname,]
+  fit <- glm(cy ~ sex)
+  summary(fit)
+  COEF <- coef(summary(fit))[,1][2]
+})
+res_sex <- abs(unname(unlist(res_sex)))
+
+res_age <- lapply(rownames(resdf), function(cyname) {
+  cy <- lpg1[rownames(lpg1) == cyname,]
+  fit <- glm(cy ~ age)
+  summary(fit)
+  COEF <- coef(summary(fit))[,1][2]
+})
+res_age <- abs(unname(unlist(res_age)))
+
+res_case <- lapply(rownames(resdf), function(cyname) {
+  cy <- lpg1[rownames(lpg1) == cyname,]
+  fit <- glm(cy ~ case)
+  summary(fit)
+  COEF <- coef(summary(fit))[,1][2]
+})
+res_case <- abs(unname(unlist(res_case)))
+
+resl <- list("sex"=res_sex,"age"=res_age,"case"=res_case)
+
+vioplot(resl,ylab="absolute GLM estimates")
+
+boxplot(resl)
+
+barplot(sapply(resl,sum),ylab="sum of GLM estimates")
+
+```
+
+## Rotator cuff arthropathy versus control instability
+
 
 ## References
 
@@ -120,4 +442,5 @@ It is always a good idea to record information about the environment, which will
 #| label: sessioninfo
 #| warning: false
 sessionInfo()
+
 ```
