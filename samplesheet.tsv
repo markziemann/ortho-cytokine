@@ -1,0 +1,47 @@
+Code	Participant ID	Patient_Group	Redcap_record_ID	pvt/pub	Age	Sex	Primary OA	Cuff_Arthropathy	Prosthesis	Affected_Side	Height_cm	Weight_kg	BMI	ASA	Smoking	Diabetes	Hypercholesterolaemia	Hypertension	Thyroid	CRP	Creat 	eGFR	Urea	Fast_Glucose	hba1c	 Metabolic Syndrome
+4001	AD-CAB 4001	Case_Osteoarthritis	84	pvt	69	F	Yes	No	Anatomic	Left	158	89	36	2	No	No	Yes	Yes	Yes 	2.9	66	82	5.2	5.7	6.1	YES
+4002	AD-CAB 4002	Case_Osteoarthritis	80	pvt	59	M	Yes	No	Anatomic	Left	182	106	32	1	Ex	No	Yes	No	No	9.3	69	90	4.3	6.2	5.4	YES
+4003	AD-CAB 4003	Case_Osteoarthritis	81	pvt	74	F	No	Yes	Reverse	Right 	153	87	37	2	Ex	No	Yes	Yes	No	6.9	77	66	5	5.4	5.4	YES
+4004	AD-CAB 4004	Case_Osteoarthritis	82	pvt	69	F	Yes	No	Anatomic	Left	165	85	32	2	No	No 	Yes	Yes	Yes 	3.9	61	89	5.8	5.8	5.6	YES
+4005	AD-CAB 4005	Case_Osteoarthritis	83	pvt	74	F	Yes	No	Anatomic	Left	169	75	26	2	Ex	No 	Yes	Yes	No 	2.9	90	72	6.6	5.2	5.7	No
+4006	AD-CAB 4006	Case_Osteoarthritis	78	pvt	81	F	Yes	No	Anatomic	Right	150	54	24	3	No	No 	Yes	Yes	No 	2.9	105	43	10.5	5.6	6	No
+4007	AD-CAB 4007	Case_Osteoarthritis	85	pvt	72	M	Yes	No	Anatomic	Right	184	118	35	2	Ex	No	Yes	Yes	No	12.7	66	90	5.8	5.6	5.6	YES
+4008	AD-CAB 4008	Case_Osteoarthritis	86	pub	70	M	Yes	No	Anatomic	Right	172	86	29	2	No	No	No	Yes	No	2.9	103	64	7.9	5.6	5.6	No
+4009	AD-CAB 4009	Case_Osteoarthritis	88	pvt	72	M	No	Yes	Reverse	Right	167	80	29	3	Ex	No	Yes	Yes	No	2.9	107	59	6.7	5.8	5.5	No
+4010	AD-CAB 4010	Case_Osteoarthritis	90	pvt	80	F	No	Yes	Reverse	Left 	161	72	28	2	No	No	Yes	No	Yes 	11.2	54	86	8.5	7.3	5.6	No
+4011	AD-CAB 4011	Case_Osteoarthritis	87	pub	76	M	No	Yes	Reverse	Right	180	92	28	2	No	No	Yes	Yes	No	4	75	85	7	6	6	No
+4012	AD-CAB 4012	Case_Osteoarthritis	91	pub	71	F	Yes	No	Anatomic	Right	163	83	31	2	No	No	Yes	Yes	No	2.9	73	72	4.8	6.3	5.7	YES
+4013	AD-CAB 4013	Case_Osteoarthritis	89	pvt	69	F	No	Yes	Reverse	Left	170	89	31	2	No	No	Yes	Yes	No	2.9	81	85	5.1	5.4	5.9	YES
+4014	AD-CAB 4014	Case_Osteoarthritis	92	pvt	71	M	No	Yes	Reverse	Right	170	99	34	2	Yes	No	Yes	No	Yes 	2.9	69	90	7	7	7.1	YES
+4015	AD-CAB 4015	Case_Osteoarthritis	93	pvt	76	M	Yes	No	Anatomic	Left	183	95	28	2	Ex	No	Yes	Yes	No	5.6	90	71	6.6	5.5	5	No
+4016	AD-CAB 4016	Case_Osteoarthritis	99	pvt	76	F	Yes	No	Anatomic	Left	167	54	19	3	Ex	No	No	No	Yes 	2.9	60	86	11	4.7	5.3	No
+4017	AD-CAB 4017	Case_Osteoarthritis	96	pvt	79	F	No	Yes	Reverse	Right	155	75	31	2	No	No	No	No	No	9.2	71	70	4.5	5.5	5.1	No
+4018	AD-CAB 4018	Case_Osteoarthritis	97	pvt	73	F	Yes	No	Anatomic	Right	167	85	30	3	Yes	No	Yes	No	No	1.5	78	65	7.3	5.4	5.9	No
+4019	AD-CAB 4019	Case_Osteoarthritis	95	pvt	65	F	Yes	No	Anatomic	Left	170	62	21	2	No	No	No	Yes	No	2.9	103	49	11	5.3	5.2	No
+4020	AD-CAB 4020	Case_Osteoarthritis	98	pvt	62	M	Yes	No	Anatomic	Left	180	117	36	2	No	No	Yes	No	No	2.9	80	90	4.9	6.9	5.9	YES
+2001	AD-CAB 2001	Control_Instability	27	pub	18	M				Left	188	80	22.6	2	Yes	No	No	No	No	5.2	87	90	3.9	4.9	5.4	No
+2002	AD-CAB 2002	Control_Instability	28	pub	22	F				Right	164	73	27.1	1	No	No	No	No	No	2.9	58	90	3.6	3.4	4.8	No
+2003	AD-CAB 2003	Control_Instability	29	pvt	21	M				Right	178	105	33	1	Yes	No	na	No	Yes	3	85	90	5.8	4.3	5.1	No
+2004	AD-CAB 2004	Control_Instability	30	pvt	19	M				Left	181	94.5	29	1	No	No	No	No	Normal	2.9	69	90	5.7	4.8	5.4	No
+2005	AD-CAB 2005	Control_Instability	31		27	M				Right																No
+2006	AD-CAB 2006	Control_Instability	32	pub	19	F				Left	160	47	18.4	1	Yes	No	No	No	No	8.2	79	90	3.8	4.2	4.9	No
+2007	AD-CAB 2007	Control_Instability	33	pub	18	M				Right	180	74	22.8	1	No	No	na	No	Yes	2.9	81	90	5.5	6.6	4.9	No
+2008	AD-CAB 2008	Control_Instability	34	pub	21	M				Right	195	129	33.9	1	No	No	No	No	No	2.9	96	90	5.9	4.9	4.7	No
+2009	AD-CAB 2009	Control_Instability	35	pub	18	M				Right	192	98	26.6	2	Yes	No	No	No	No	2.9	82	90	4.1	4.6	5.7	No
+2010	AD-CAB 2010	Control_Instability	36	pub	21	M				Left	180	115	35.5	2	Yes	No	No	No	No	3.2	84	90	5.4	4.4	5.3	No
+2011	AD-CAB 2011	Control_Instability	37	pub	30	M				Left	178	82	25.9	1	Ex	No	No	No	No	2.9	94	90	8.2	5.1	5.3	No
+2012	AD-CAB 2012	Control_Instability	38	pvt	35	M				Left	188	75	21.2	1	No	No	na	No	No	2.9	106	78	4.7	5.4	5.2	No
+2013	AD-CAB 2013	Control_Instability	39	pub	21	M				Left	175	96	31.3	1	No	No	No	No	No		93	90	4.1	4.6	4.9	No
+2014	AD-CAB 2014	Control_Instability	40	pub	29	M				Right	185	105	30.7	1	No	No	No	No	No	2.9	81	90	6.5	5	4.6	No
+2015	AD-CAB 2015	Control_Instability	41	pub	23	M				Left	175	82	26.8	1	Yes	No	No	No	No	2.9	94	90	4.5	4.1	4.9	No
+2016	AD-CAB 2016	Control_Instability	42	pvt	35	M				Right	187	80	22.9	1	No	No	No	No	No	2.9	103	81	4.9	4.5	5	No
+2017	AD-CAB 2017	Control_Instability	43	pub	19	M				Right	195	118	31	2	No	No	No	No	No	2.9	95	90	6.2	4.2	4.5	No
+2018	AD-CAB 2018	Control_Instability	44	pub	27	M				Right	170	82	28.4	1	No	No	No	No	No		95	90	6.2	5.4	5.5	No
+2019	AD-CAB 2019	Control_Instability	45	pub	27	M				Left	180	76	23.5	1	Ex	No	NA	No	No	2.9	65	90	6.9	4.5	4.9	No
+2020	AD-CAB 2020	Control_Instability	46	pub	20	M				Left	181	85	25.9	1	No	No	Normal	no	No	2.9	105	86	5.8	4.4	5	No
+2021	AD-CAB 2021	Control_Instability	47	pub	18	M				Left	176	65	21	1	No	No	No	No	No	2.9	68	90	4.5	4.3	4.8	No
+2022	AD-CAB 2022	Control_Instability	48	pvt	32	F				Left	166	66	24	1	No	No	na	No	Yes	2.9	52	90	3.1	4.1	5.3	No
+2023	AD-CAB 2023	Control_Instability	49	pvt	27	F				Left	170	66	22.8	1	No	No	No	No	No	2.9	91	75	5.5	4.3	4.9	No
+2024	AD-CAB 2024	Control_Instability	50	pvt	21	M				Right	189	83	23.2	1	No	No	na	No	No	2.9	87	90	3.9	4.7	4.9	No
+2025	AD-CAB 2025	Control_Instability	51	pvt	21	M				Right	173	92	31	1	Yes	No	na	No	No	2.9	71	90	4.1	4.7	5.8	No
+2026	AD-CAB 2026	Control_Instability	52	pub	23	F				Left	169	57	20	2	Yes	No	No	No	Yes	2.9	68	90	4.5	4.6	5.1	No
