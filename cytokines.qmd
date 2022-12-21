@@ -21,8 +21,11 @@ Also putting the columns in order.
 ```{r}
 #| label: load data
 
-pg <- read.table("pg_ml.tsv",sep="\t",header=TRUE,row.names=1)
-pg[1:6,1:8]
+pg1 <- read.table("pg_ml.tsv",sep="\t",header=TRUE,row.names=1)
+pg2 <- read.table("pg_ml_part2.tsv",sep="\t",header=TRUE,row.names=1)
+pg <- cbind(pg1,pg2)
+
+pg[1:4,]
 
 pg <- t(pg)
 pg <- pg[,order(colnames(pg))]
